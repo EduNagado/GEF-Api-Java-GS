@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Abrigo {
-    private long id;
+    private long abrigoId;
     private String nome;
     private List<User> usuarios= new ArrayList<>();
 }

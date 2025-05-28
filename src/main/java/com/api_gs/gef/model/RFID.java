@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RFID {
-    private Long id;
+    private Long idRFID;
     private double latitude;
     private double longitude;
 }

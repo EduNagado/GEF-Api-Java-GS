@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pulseira {
-    private Long id;
+    private Long PulseiraId;
     private NFC nfc;
     private RFID rfid;
     private BatimentoCardiaco batimento;

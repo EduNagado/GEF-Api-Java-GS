@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BatimentoCardiaco {
-    private Long id;
+    private Long idBatimentoCardiaco;
     private int bpm;
     // private Date timestamp;
 }
