@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,11 +18,9 @@ import com.api_gs.gef.dto.PulseiraDTO;
 import com.api_gs.gef.model.BatimentoCardiaco;
 import com.api_gs.gef.model.NFC;
 import com.api_gs.gef.model.Pulseira;
-import com.api_gs.gef.model.RFID;
 import com.api_gs.gef.repository.PulseiraRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,23 +36,18 @@ public class PulseiraController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cadastra uma nova pulseira com sensores")
     public Pulseira create(@RequestBody @Valid PulseiraDTO dto) {
-        log.info("Criando pulseira com NFC ID: {}", dto.idNFC());
+        log.info("Criando pulseira");
 
         Pulseira pulseira = new Pulseira();
 
         NFC nfc = new NFC();
-        nfc.setIdNFC(Long.valueOf(dto.idNFC()));
 
-        RFID rfid = new RFID();
-        rfid.setLatitude(dto.latitude());
-        rfid.setLongitude(dto.longitude());
 
         BatimentoCardiaco batimento = new BatimentoCardiaco();
         batimento.setBpm(dto.bpm());
         // Aqui você poderia converter dto.timestamp() em Date se necessário
 
         pulseira.setNfc(nfc);
-        pulseira.setRfid(rfid);
         pulseira.setBatimento(batimento);
 
         return pulseiraRepository.save(pulseira);

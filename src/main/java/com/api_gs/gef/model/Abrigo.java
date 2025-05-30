@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +17,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "abrigo")
 @Entity
 public class Abrigo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "abrigo_seq")
+    @SequenceGenerator(name = "abrigo_seq", sequenceName = "SEQ_ABRIGO", allocationSize = 1)
     private long abrigoId;
+
     private String nome;
     private String endereco;
 
     @OneToMany(mappedBy = "abrigo")
-    private List<User> usuarios= new ArrayList<>();
+    private List<Usuario> usuarios= new ArrayList<>();
 
 }

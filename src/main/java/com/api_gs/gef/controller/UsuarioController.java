@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api_gs.gef.dto.UserDTO;
 import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Pulseira;
-import com.api_gs.gef.model.User;
+import com.api_gs.gef.model.Usuario;
 import com.api_gs.gef.repository.AbrigoRepository;
 import com.api_gs.gef.repository.PulseiraRepository;
 import com.api_gs.gef.repository.UserRepository;
@@ -50,7 +50,7 @@ public class UsuarioController {
                 @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
                 @ApiResponse(responseCode = "400", description = "Dados inválidos")
             })
-    public User create(@RequestBody @Valid UserDTO dto) {
+    public Usuario create(@RequestBody @Valid UserDTO dto) {
         log.info("Criando usuário: {}", dto.nome());
 
         Optional<Abrigo> abrigo = abrigoRepository.findById(dto.abrigoId());
@@ -60,7 +60,7 @@ public class UsuarioController {
             throw new IllegalArgumentException("Abrigo ou Pulseira inválidos");
         }
 
-        User usuario = new User();
+        Usuario usuario = new Usuario();
         usuario.setNome(dto.nome());
         usuario.setEndereco(dto.endereco());
         usuario.setAbrigo(abrigo.get());
@@ -71,7 +71,7 @@ public class UsuarioController {
 
     @GetMapping
     @Operation(summary = "Lista os usuários com paginação e filtros")
-    public Page<User> listar(
+    public Page<Usuario> listar(
             @ParameterObject @PageableDefault(size = 10, sort = "nome") Pageable pageable,
             @RequestParam(required = false) String nome
     ) {

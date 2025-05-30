@@ -1,11 +1,16 @@
 package com.api_gs.gef.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record PulseiraDTO(
-    Long id,
-    String idNFC,
-    Double latitude,
-    Double longitude,
+
+
+
+    @NotNull(message = "BPM não pode ser nulo")
     Integer bpm,
+
+    @NotBlank
     String timestamp){
     
 }
