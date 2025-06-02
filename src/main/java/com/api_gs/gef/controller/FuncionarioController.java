@@ -2,6 +2,10 @@ package com.api_gs.gef.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_gs.gef.dto.FuncionarioDTO;
+import com.api_gs.gef.dto.LoginDTO;
 import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Funcionario;
 import com.api_gs.gef.repository.AbrigoRepository;
@@ -28,6 +33,9 @@ public class FuncionarioController {
     @Autowired
     private AbrigoRepository abrigoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Funcionario create(@RequestBody @Valid FuncionarioDTO dto) {
@@ -39,10 +47,26 @@ public class FuncionarioController {
         // Criar funcionário
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(dto.nome());
-        funcionario.setPassword(dto.password()); // → depois, criptografe com BCrypt
+        funcionario.setPassword(dto.password()); 
+        funcionario.setEmail(dto.email());
         funcionario.setCargo(dto.cargo());
         funcionario.setAbrigo(abrigo);
 
+        String senhaCriptografada = passwordEncoder.encode(dto.password());
+        funcionario.setPassword(senhaCriptografada);
+
         return funcionarioRepository.save(funcionario);
+    }
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid LoginDTO LoginDTO){
+        var token = new UsernamePasswordAuthenticationToken(LoginDTO.email(), LoginDTO.password());
+        var authenticaon =  manager.authenticate(token);
+
+        return ResponseEntity.ok().build();
+
     }
 }

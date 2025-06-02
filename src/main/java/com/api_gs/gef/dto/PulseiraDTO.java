@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public record PulseiraDTO(
 
 
-
     @NotNull(message = "BPM não pode ser nulo")
     Integer bpm,
 

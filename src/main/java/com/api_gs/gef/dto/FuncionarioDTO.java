@@ -2,6 +2,7 @@ package com.api_gs.gef.dto;
 
 import com.api_gs.gef.model.Cargo;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,10 @@ public record FuncionarioDTO(
 
     @NotNull(message = "campo obrigatório")
     Cargo cargo,
+
+    @Email(message = "Email inválido")
+    @NotBlank
+    String email,
 
     @NotBlank(message = "campo obrigatório")
     String nomeAbrigo){
