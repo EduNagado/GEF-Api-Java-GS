@@ -4,19 +4,19 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserDTO(
 
-    @NotBlank
+    @NotBlank(message = "campo obrigatório")
     String nome,
-
 
     int idade,
 
-    @NotBlank
+    @NotBlank(message = "campo obrigatório")
     String endereco,
 
+    @NotBlank(message = "campo obrigatório")
+    String nomeAbrigo
 
-    Long abrigoId,
 
 
-    Long PulseiraId){
+    ){
     
 }

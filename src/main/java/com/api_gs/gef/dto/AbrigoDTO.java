@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AbrigoDTO(
 
-    @NotBlank
+    @NotBlank(message = "campo obrigatório")
     String nome,
     
-    @NotBlank
+    @NotBlank(message = "campo obrigatório")
     String endereco) {
     
 }

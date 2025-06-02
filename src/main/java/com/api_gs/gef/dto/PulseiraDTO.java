@@ -10,7 +10,7 @@ public record PulseiraDTO(
     @NotNull(message = "BPM não pode ser nulo")
     Integer bpm,
 
-    @NotBlank
+    @NotBlank(message = "campo obrigatório")
     String timestamp){
     
 }

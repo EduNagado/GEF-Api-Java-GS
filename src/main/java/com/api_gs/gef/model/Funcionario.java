@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -26,8 +27,9 @@ public class Funcionario {
     private Long id;
     private String nome;
     private String password;
-    private String cargo;
+    private Cargo cargo;
 
     @ManyToOne
+    @JoinColumn(name = "ABRIGO_ID", nullable = false)
     private Abrigo abrigo;
 }

@@ -1,7 +1,5 @@
 package com.api_gs.gef.controller;
 
-import java.util.Optional;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,51 +19,46 @@ import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Pulseira;
 import com.api_gs.gef.model.Usuario;
 import com.api_gs.gef.repository.AbrigoRepository;
-import com.api_gs.gef.repository.PulseiraRepository;
 import com.api_gs.gef.repository.UserRepository;
+import com.api_gs.gef.service.PulseiraService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private AbrigoRepository abrigoRepository;
 
+    @Autowired  
+    private UserRepository userRepository;
+
     @Autowired
-    private PulseiraRepository pulseiraRepository;
+    private PulseiraService pulseiraService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Cria um novo usuário com pulseira vinculada",
-            responses = {
-                @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
-                @ApiResponse(responseCode = "400", description = "Dados inválidos")
-            })
     public Usuario create(@RequestBody @Valid UserDTO dto) {
-        log.info("Criando usuário: {}", dto.nome());
 
-        Optional<Abrigo> abrigo = abrigoRepository.findById(dto.abrigoId());
-        Optional<Pulseira> pulseira = pulseiraRepository.findById(dto.PulseiraId());
+        Abrigo abrigo = abrigoRepository.findByNome(dto.nomeAbrigo())
+        .orElseThrow(() -> new IllegalArgumentException("Abrigo não encontrado"));
 
-        if (abrigo.isEmpty() || pulseira.isEmpty()) {
-            throw new IllegalArgumentException("Abrigo ou Pulseira inválidos");
-        }
+      
+        Pulseira pulseira = pulseiraService.criarPulseira(80); 
+
 
         Usuario usuario = new Usuario();
         usuario.setNome(dto.nome());
+        usuario.setIdade(dto.idade());
         usuario.setEndereco(dto.endereco());
-        usuario.setAbrigo(abrigo.get());
-        usuario.setPulseira(pulseira.get());
+        usuario.setAbrigo(abrigo);
+        usuario.setPulseira(pulseira);
 
+        // 4. Salvar e retornar
         return userRepository.save(usuario);
     }
 

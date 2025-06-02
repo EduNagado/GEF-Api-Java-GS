@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_gs.gef.dto.PulseiraDTO;
-import com.api_gs.gef.model.BatimentoCardiaco;
-import com.api_gs.gef.model.NFC;
 import com.api_gs.gef.model.Pulseira;
 import com.api_gs.gef.repository.PulseiraRepository;
+import com.api_gs.gef.service.PulseiraService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -32,25 +31,15 @@ public class PulseiraController {
     @Autowired
     private PulseiraRepository pulseiraRepository;
 
+    @Autowired
+    private PulseiraService pulseiraService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cadastra uma nova pulseira com sensores")
     public Pulseira create(@RequestBody @Valid PulseiraDTO dto) {
         log.info("Criando pulseira");
-
-        Pulseira pulseira = new Pulseira();
-
-        NFC nfc = new NFC();
-
-
-        BatimentoCardiaco batimento = new BatimentoCardiaco();
-        batimento.setBpm(dto.bpm());
-        // Aqui você poderia converter dto.timestamp() em Date se necessário
-
-        pulseira.setNfc(nfc);
-        pulseira.setBatimento(batimento);
-
-        return pulseiraRepository.save(pulseira);
+        return pulseiraService.criarPulseira(dto.bpm());
     }
 
     @GetMapping
