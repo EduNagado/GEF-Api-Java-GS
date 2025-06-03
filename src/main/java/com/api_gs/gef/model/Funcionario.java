@@ -40,7 +40,7 @@ public class Funcionario implements UserDetails {
     private String nome;
     private String email;
     private String password;
-
+    
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
 

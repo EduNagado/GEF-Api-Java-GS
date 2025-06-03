@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
-@RequestMapping("/api/abrigos")
+@RequestMapping("/abrigos")
 @Slf4j
 public class AbrigoController {
 

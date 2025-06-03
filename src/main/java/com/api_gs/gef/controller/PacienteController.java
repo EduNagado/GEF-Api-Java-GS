@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_gs.gef.dto.UserDTO;
+import com.api_gs.gef.dto.PacienteDTO;
 import com.api_gs.gef.model.Abrigo;
+import com.api_gs.gef.model.Paciente;
 import com.api_gs.gef.model.Pulseira;
-import com.api_gs.gef.model.Usuario;
 import com.api_gs.gef.repository.AbrigoRepository;
 import com.api_gs.gef.repository.UserRepository;
 import com.api_gs.gef.service.PulseiraService;
@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping("/paciente")
+public class PacienteController {
 
     @Autowired
     private AbrigoRepository abrigoRepository;
@@ -42,7 +42,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario create(@RequestBody @Valid UserDTO dto) {
+    public Paciente create(@RequestBody @Valid PacienteDTO dto) {
 
         Abrigo abrigo = abrigoRepository.findByNome(dto.nomeAbrigo())
         .orElseThrow(() -> new IllegalArgumentException("Abrigo não encontrado"));
@@ -51,24 +51,24 @@ public class UsuarioController {
         Pulseira pulseira = pulseiraService.criarPulseira(80); 
 
 
-        Usuario usuario = new Usuario();
-        usuario.setNome(dto.nome());
-        usuario.setIdade(dto.idade());
-        usuario.setEndereco(dto.endereco());
-        usuario.setAbrigo(abrigo);
-        usuario.setPulseira(pulseira);
+        Paciente pacientes = new Paciente();
+        pacientes.setNome(dto.nome());
+        pacientes.setIdade(dto.idade());
+        pacientes.setEndereco(dto.endereco());
+        pacientes.setAbrigo(abrigo);
+        pacientes.setPulseira(pulseira);
 
         // 4. Salvar e retornar
-        return userRepository.save(usuario);
+        return userRepository.save(pacientes);
     }
 
     @GetMapping
-    @Operation(summary = "Lista os usuários com paginação e filtros")
-    public Page<Usuario> listar(
+    @Operation(summary = "Lista os pacientes com paginação e filtros")
+    public Page<Paciente> listar(
             @ParameterObject @PageableDefault(size = 10, sort = "nome") Pageable pageable,
             @RequestParam(required = false) String nome
     ) {
-        log.info("Listando usuários. Filtro nome = {}", nome);
+        log.info("Listando pacientes. Filtro nome = {}", nome);
 
         if (nome != null && !nome.isBlank()) {
             return userRepository.findByNomeContainingIgnoreCase(nome, pageable);

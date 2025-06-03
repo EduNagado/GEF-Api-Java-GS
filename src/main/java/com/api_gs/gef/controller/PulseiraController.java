@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/pulseiras")
+@RequestMapping("/pulseiras")
 @Slf4j
 public class PulseiraController {
 

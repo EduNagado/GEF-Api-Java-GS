@@ -29,6 +29,6 @@ public class Abrigo {
     private String endereco;
 
     @OneToMany(mappedBy = "abrigo")
-    private List<Usuario> usuarios= new ArrayList<>();
+    private List<Paciente> usuarios= new ArrayList<>();
 
 }

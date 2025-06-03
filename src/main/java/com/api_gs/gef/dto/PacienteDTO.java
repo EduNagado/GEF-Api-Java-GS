@@ -2,7 +2,7 @@ package com.api_gs.gef.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record UserDTO(
+public record PacienteDTO(
 
     @NotBlank(message = "campo obrigatório")
     String nome,

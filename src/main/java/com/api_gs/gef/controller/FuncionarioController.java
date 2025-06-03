@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api_gs.gef.dto.DadosTokenJWT;
 import com.api_gs.gef.dto.FuncionarioDTO;
 import com.api_gs.gef.dto.LoginDTO;
 import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Funcionario;
 import com.api_gs.gef.repository.AbrigoRepository;
 import com.api_gs.gef.repository.FuncionarioRepository;
+import com.api_gs.gef.service.TokenService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -61,12 +63,16 @@ public class FuncionarioController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginDTO LoginDTO){
-        var token = new UsernamePasswordAuthenticationToken(LoginDTO.email(), LoginDTO.password());
-        var authenticaon =  manager.authenticate(token);
-
-        return ResponseEntity.ok().build();
-
+         var userPwd = new UsernamePasswordAuthenticationToken(
+                LoginDTO.email(),
+                LoginDTO.password());
+        var auth = this.manager.authenticate(userPwd);
+        var token = tokenService.generateToken((Funcionario) auth.getPrincipal());
+        return ResponseEntity.ok(new DadosTokenJWT(token));
     }
 }
