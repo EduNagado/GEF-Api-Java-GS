@@ -6,12 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_gs.gef.dto.PacienteDTO;
@@ -41,25 +41,24 @@ public class PacienteController {
     private PulseiraService pulseiraService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Paciente create(@RequestBody @Valid PacienteDTO dto) {
+    @Operation(summary = "Cadastrar Paciente")
+    public ResponseEntity<Paciente> create(@RequestBody @Valid PacienteDTO dto) {
 
         Abrigo abrigo = abrigoRepository.findByNome(dto.nomeAbrigo())
-        .orElseThrow(() -> new IllegalArgumentException("Abrigo não encontrado"));
+            .orElseThrow(() -> new IllegalArgumentException("Abrigo não encontrado"));
 
-      
-        Pulseira pulseira = pulseiraService.criarPulseira(80); 
+        Pulseira pulseira = pulseiraService.criarPulseira(80);
 
+        Paciente paciente = new Paciente();
+        paciente.setNome(dto.nome());
+        paciente.setIdade(dto.idade());
+        paciente.setEndereco(dto.endereco());
+        paciente.setAbrigo(abrigo);
+        paciente.setPulseira(pulseira);
 
-        Paciente pacientes = new Paciente();
-        pacientes.setNome(dto.nome());
-        pacientes.setIdade(dto.idade());
-        pacientes.setEndereco(dto.endereco());
-        pacientes.setAbrigo(abrigo);
-        pacientes.setPulseira(pulseira);
+        Paciente pacienteSalvo = userRepository.save(paciente);
 
-        // 4. Salvar e retornar
-        return userRepository.save(pacientes);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteSalvo);
     }
 
     @GetMapping

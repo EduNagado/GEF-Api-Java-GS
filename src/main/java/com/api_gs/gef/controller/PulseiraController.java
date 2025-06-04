@@ -7,11 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_gs.gef.dto.PulseiraDTO;
@@ -33,13 +33,15 @@ public class PulseiraController {
 
     @Autowired
     private PulseiraService pulseiraService;
-
+    
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Cadastra uma nova pulseira com sensores")
-    public Pulseira create(@RequestBody @Valid PulseiraDTO dto) {
+    @Operation(summary = "Cadastra uma nova pulseira ")
+    public ResponseEntity<Pulseira> create(@RequestBody @Valid PulseiraDTO dto) {
         log.info("Criando pulseira");
-        return pulseiraService.criarPulseira(dto.bpm());
+
+        Pulseira pulseira = pulseiraService.criarPulseira(dto.bpm());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(pulseira);
     }
 
     @GetMapping

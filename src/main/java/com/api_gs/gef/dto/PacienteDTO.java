@@ -14,9 +14,5 @@ public record PacienteDTO(
 
     @NotBlank(message = "campo obrigatório")
     String nomeAbrigo
-
-
-
-    ){
-    
+){
 }

@@ -1,7 +1,5 @@
 package com.api_gs.gef.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -45,6 +40,12 @@ public class SecurityConfiguration {
                 // 🔓 Libera acesso público para listagem de abrigos
                 .requestMatchers(HttpMethod.POST, "/abrigos/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/funcionario/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/paciente/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/paciente**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/paciente**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/paciente**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/funcionario/**").permitAll() 
+                .requestMatchers(HttpMethod.DELETE, "/funcionario/**").permitAll() 
 
                 // 🔐 Somente ADMINISTRADOR pode acessar essas rotas:
                 .requestMatchers(HttpMethod.GET, "/funcionarios/**").hasRole("ADMINISTRADOR")
@@ -61,18 +62,6 @@ public class SecurityConfiguration {
     }
 
 
-
-    @Bean
-    CorsConfigurationSource corsConfig(){
-        var config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000/"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        config.setAllowedHeaders(List.of("*"));
-
-        var source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

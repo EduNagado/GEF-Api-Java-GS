@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_gs.gef.dto.AbrigoDTO;
@@ -29,18 +29,18 @@ public class AbrigoController {
 
     @Autowired
     private AbrigoRepository abrigoRepository;
-
+    
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cadastra um novo abrigo")
-    public Abrigo create(@RequestBody @Valid AbrigoDTO dto) {
+    public ResponseEntity<Abrigo> create(@RequestBody @Valid AbrigoDTO dto) {
         log.info("Cadastrando abrigo: {}", dto.nome());
 
         Abrigo abrigo = new Abrigo();
         abrigo.setNome(dto.nome());
         abrigo.setEndereco(dto.endereco());
 
-        return abrigoRepository.save(abrigo);
+        Abrigo abrigoSalvo = abrigoRepository.save(abrigo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(abrigoSalvo);
     }
 
     @GetMapping
@@ -51,4 +51,6 @@ public class AbrigoController {
         log.info("Listando abrigos");
         return abrigoRepository.findAll(pageable);
     }
+
+
 }
