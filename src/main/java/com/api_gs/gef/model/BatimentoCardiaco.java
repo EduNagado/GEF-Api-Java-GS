@@ -23,7 +23,17 @@ public class BatimentoCardiaco {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "iot_seq")
     @SequenceGenerator(name = "iot_seq", sequenceName = "SEQ_IOT", allocationSize = 1)
     private Long idBatimentoCardiaco;
-    private int bpm;
+    private Integer bpm;
 
     private LocalDateTime timestamp;
+
+    public Integer getBpm() {
+        return bpm;
+    }
+
+    public LocalDateTime getTimestamp(){
+        return timestamp;
+    }
+
+
 }

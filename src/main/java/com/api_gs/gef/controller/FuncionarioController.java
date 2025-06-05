@@ -26,6 +26,7 @@ import com.api_gs.gef.repository.FuncionarioRepository;
 import com.api_gs.gef.service.TokenService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +103,9 @@ public class FuncionarioController {
     @Operation(summary = "Deletar Funcionario por ID")
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id){
+        if (!funcionarioRepository.existsById(id)) {
+            throw new EntityNotFoundException("Funcionário com ID " + id + " não encontrado");
+        }
         funcionarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

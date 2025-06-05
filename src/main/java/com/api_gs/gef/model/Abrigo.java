@@ -3,6 +3,8 @@ package com.api_gs.gef.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class Abrigo {
     private String endereco;
 
     @OneToMany(mappedBy = "abrigo")
+    @JsonManagedReference
     private List<Paciente> usuarios= new ArrayList<>();
 
 }

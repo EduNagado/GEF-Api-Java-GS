@@ -35,25 +35,38 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(auth -> auth
 
                  // 🔓 Libera Swagger
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+               .requestMatchers(
+    "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/v3/api-docs",
+                "/swagger-resources/**",
+                "/webjars/**"
+            ).permitAll()
 
-                // 🔓 Libera acesso público para listagem de abrigos
+
                 .requestMatchers(HttpMethod.POST, "/abrigos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/abrigos/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/funcionario/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/paciente/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/paciente**").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/paciente**").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/paciente**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/funcionario/**").permitAll() 
                 .requestMatchers(HttpMethod.DELETE, "/funcionario/**").permitAll() 
+                .requestMatchers(HttpMethod.POST, "/paciente/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/paciente/**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/paciente/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/paciente/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/pulseiras/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/pulseiras/**").permitAll()
+
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
 
                 // 🔐 Somente ADMINISTRADOR pode acessar essas rotas:
-                .requestMatchers(HttpMethod.GET, "/funcionarios/**").hasRole("ADMINISTRADOR")
-                .requestMatchers(HttpMethod.GET, "/pacientes/**").hasRole("ADMINISTRADOR")
+                // .requestMatchers(HttpMethod.GET, "/funcionarios/**").hasRole("ADMINISTRADOR")
+                // .requestMatchers(HttpMethod.GET, "/pacientes/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMINISTRADOR")
-
+                
                 // ✅ Qualquer outra requisição exige autenticação
                 .anyRequest().authenticated()
             )

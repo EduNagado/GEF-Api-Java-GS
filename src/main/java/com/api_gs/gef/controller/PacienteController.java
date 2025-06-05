@@ -7,22 +7,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api_gs.gef.dto.DadosAtualizarPaciente;
+import com.api_gs.gef.dto.DadosDetalharPaciente;
 import com.api_gs.gef.dto.PacienteDTO;
 import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Paciente;
 import com.api_gs.gef.model.Pulseira;
 import com.api_gs.gef.repository.AbrigoRepository;
-import com.api_gs.gef.repository.UserRepository;
+import com.api_gs.gef.repository.PacienteRepository;
 import com.api_gs.gef.service.PulseiraService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +41,7 @@ public class PacienteController {
     private AbrigoRepository abrigoRepository;
 
     @Autowired  
-    private UserRepository userRepository;
+    private PacienteRepository pacienteRepository;
 
     @Autowired
     private PulseiraService pulseiraService;
@@ -56,7 +62,7 @@ public class PacienteController {
         paciente.setAbrigo(abrigo);
         paciente.setPulseira(pulseira);
 
-        Paciente pacienteSalvo = userRepository.save(paciente);
+        Paciente pacienteSalvo = pacienteRepository.save(paciente);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteSalvo);
     }
@@ -70,9 +76,32 @@ public class PacienteController {
         log.info("Listando pacientes. Filtro nome = {}", nome);
 
         if (nome != null && !nome.isBlank()) {
-            return userRepository.findByNomeContainingIgnoreCase(nome, pageable);
+            return pacienteRepository.findByNomeContainingIgnoreCase(nome, pageable);
         }
 
-        return userRepository.findAll(pageable);
+        return pacienteRepository.findAll(pageable);
+    }
+
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar informação do funcionário")
+    @Transactional
+    public ResponseEntity<DadosDetalharPaciente> atualizar(
+            @PathVariable Long id,
+            @RequestBody @Valid DadosAtualizarPaciente dadosPaciente) {
+        Paciente paciente = pacienteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com ID: " + id));
+        paciente.atualizarInformacoesPaciente(dadosPaciente);
+
+
+        return ResponseEntity.ok(new DadosDetalharPaciente(paciente));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar Funcionario por ID")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        pacienteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

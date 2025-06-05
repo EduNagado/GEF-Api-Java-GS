@@ -1,6 +1,9 @@
 package com.api_gs.gef.model;
 
 
+import com.api_gs.gef.dto.DadosAtualizarPaciente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,11 +34,25 @@ public class Paciente {
     private String endereco;
     
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "abrigo_id", nullable = false)
     private Abrigo abrigo;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "pulseira_id", nullable = false)
     private Pulseira pulseira;
+
+    public void atualizarInformacoesPaciente(DadosAtualizarPaciente dadosPaciente) {
+        if (dadosPaciente.nome() != null && !dadosPaciente.nome().isBlank()) {
+            this.nome = dadosPaciente.nome();
+        }
+        if (dadosPaciente.idade() != null) {
+            this.idade = dadosPaciente.idade();
+        }
+        if (dadosPaciente.endereco() != null && !dadosPaciente.endereco().isBlank()) {
+            this.endereco = dadosPaciente.endereco();
+        }
+    }
 
 }

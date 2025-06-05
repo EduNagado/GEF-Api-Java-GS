@@ -30,19 +30,26 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-            var token = this.recoverToken(request);
-            if (token != null) {
-                var email = tokenService.validarToken(token);
 
-                var optionalFuncionario = this.funcionarioRepository.findByEmail(email);
-
-                optionalFuncionario.ifPresent(funcionario -> {
-                    var authentication = new UsernamePasswordAuthenticationToken(
-                            funcionario, null, funcionario.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                });
-            }
+        String uri = request.getRequestURI();
+        if (uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs") || uri.startsWith("/webjars")) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        var token = this.recoverToken(request);
+        if (token != null) {
+            var email = tokenService.validarToken(token);
+
+            var optionalFuncionario = this.funcionarioRepository.findByEmail(email);
+
+            optionalFuncionario.ifPresent(funcionario -> {
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        funcionario, null, funcionario.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            });
+        }
+        filterChain.doFilter(request, response);
     }
 
     
