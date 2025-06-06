@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_gs.gef.dto.DadosAtualizarFunc;
-import com.api_gs.gef.dto.DadosDetalharFunc;
+import com.api_gs.gef.dto.DadosAtualizadoFuncionario;
+import com.api_gs.gef.dto.DadosDetalhadoFunc;
 import com.api_gs.gef.dto.DadosTokenJWT;
 import com.api_gs.gef.dto.FuncionarioDTO;
 import com.api_gs.gef.dto.LoginDTO;
@@ -86,9 +86,9 @@ public class FuncionarioController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar informação do funcionário")
     @Transactional
-    public ResponseEntity<DadosDetalharFunc> atualizar(
+    public ResponseEntity<DadosDetalhadoFunc> atualizar(
             @PathVariable Long id,
-            @RequestBody @Valid DadosAtualizarFunc dados) {
+            @RequestBody @Valid DadosAtualizadoFuncionario dados) {
         Funcionario funcionario = funcionarioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com ID: " + id));
         funcionario.atualizarInformacoes(dados);
@@ -96,7 +96,7 @@ public class FuncionarioController {
         String senhaCriptografada = passwordEncoder.encode(dados.password());
         funcionario.setPassword(senhaCriptografada);
 
-        return ResponseEntity.ok(new DadosDetalharFunc(funcionario));
+        return ResponseEntity.ok(new DadosDetalhadoFunc(funcionario));
     }
 
     @DeleteMapping("/{id}")

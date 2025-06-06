@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_gs.gef.dto.DadosAtualizarPaciente;
-import com.api_gs.gef.dto.DadosDetalharPaciente;
+import com.api_gs.gef.dto.DadosAtualizadoPaciente;
+import com.api_gs.gef.dto.DadosDetalhadoPaciente;
+import com.api_gs.gef.dto.DadosListandoPaciente;
 import com.api_gs.gef.dto.PacienteDTO;
 import com.api_gs.gef.model.Abrigo;
 import com.api_gs.gef.model.Paciente;
@@ -81,20 +82,26 @@ public class PacienteController {
 
         return pacienteRepository.findAll(pageable);
     }
-
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosListandoPaciente> buscarPorId(@PathVariable Long id) {
+        Paciente paciente = pacienteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Paciente não encontrado com ID: " + id));
+        return ResponseEntity.ok(new DadosListandoPaciente(paciente));
+    }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar informação do funcionário")
     @Transactional
-    public ResponseEntity<DadosDetalharPaciente> atualizar(
+    public ResponseEntity<DadosDetalhadoPaciente> atualizar(
             @PathVariable Long id,
-            @RequestBody @Valid DadosAtualizarPaciente dadosPaciente) {
+            @RequestBody @Valid DadosAtualizadoPaciente dadosPaciente) {
         Paciente paciente = pacienteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com ID: " + id));
         paciente.atualizarInformacoesPaciente(dadosPaciente);
 
 
-        return ResponseEntity.ok(new DadosDetalharPaciente(paciente));
+        return ResponseEntity.ok(new DadosDetalhadoPaciente(paciente));
     }
 
     @DeleteMapping("/{id}")

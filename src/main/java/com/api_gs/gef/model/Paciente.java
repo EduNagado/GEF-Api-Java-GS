@@ -1,7 +1,7 @@
 package com.api_gs.gef.model;
 
 
-import com.api_gs.gef.dto.DadosAtualizarPaciente;
+import com.api_gs.gef.dto.DadosAtualizadoPaciente;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -43,7 +43,7 @@ public class Paciente {
     @JoinColumn(name = "pulseira_id", nullable = false)
     private Pulseira pulseira;
 
-    public void atualizarInformacoesPaciente(DadosAtualizarPaciente dadosPaciente) {
+    public void atualizarInformacoesPaciente(DadosAtualizadoPaciente dadosPaciente) {
         if (dadosPaciente.nome() != null && !dadosPaciente.nome().isBlank()) {
             this.nome = dadosPaciente.nome();
         }

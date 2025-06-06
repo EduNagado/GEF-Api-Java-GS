@@ -62,9 +62,9 @@
 		</dependency>
 
 		<dependency>mvn clean install
-
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			
 		</dependency>
 
 		<dependency>

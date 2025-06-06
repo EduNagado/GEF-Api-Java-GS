@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.api_gs.gef.dto.DadosAtualizarFunc;
+import com.api_gs.gef.dto.DadosAtualizadoFuncionario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -50,7 +50,7 @@ public class Funcionario implements UserDetails {
     @JsonIgnore
     private Abrigo abrigo;
 
-    public void atualizarInformacoes(DadosAtualizarFunc dados) {
+    public void atualizarInformacoes(DadosAtualizadoFuncionario dados) {
         if (dados.nome() != null && !dados.nome().isBlank()) {
             this.nome = dados.nome();
         }
