@@ -44,9 +44,6 @@ public class SecurityConfiguration {
                 "/webjars/**"
             ).permitAll()
 
-
-                .requestMatchers(HttpMethod.POST, "/abrigos/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/abrigos/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/funcionario/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/funcionario/**").permitAll() 
                 .requestMatchers(HttpMethod.DELETE, "/funcionario/**").permitAll() 
@@ -54,20 +51,17 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/paciente/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/paciente/**").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/paciente/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/pulseiras/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/pulseiras/**").permitAll()
-
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
 
                 // 🔐 Somente ADMINISTRADOR pode acessar essas rotas:
-                // .requestMatchers(HttpMethod.GET, "/funcionarios/**").hasRole("ADMINISTRADOR")
-                // .requestMatchers(HttpMethod.GET, "/pacientes/**").hasRole("ADMINISTRADOR")
+                .requestMatchers(HttpMethod.POST, "/abrigos/**").hasRole("ADMINISTRADOR")
+                .requestMatchers(HttpMethod.GET, "/abrigos/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMINISTRADOR")
                 // .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMINISTRADOR")
                 
-                // ✅ Qualquer outra requisição exige autenticação
+                
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
